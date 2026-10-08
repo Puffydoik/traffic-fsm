@@ -400,17 +400,22 @@ class Pedestrian {
     constructor(axis, fixed, from, to) {
         this.axis = axis; this.fixed = fixed;
         this.from = from; this.to = to;
-        this.pos = from; this.dir = 1;
+        this.pos = from;
         this.active = false;
+        this.done = false;
         this.speed = CONFIG.PED_SPEED;
     }
-    start() { this.active = true; this.pos = this.from; this.dir = 1; }
+    start() { this.active = true; this.done = false; this.pos = this.from; }
     stop() { this.active = false; }
     update(dt) {
-        if (!this.active) return null;
-        this.pos += this.dir * this.speed * dt;
-        if (this.pos >= this.to) { this.pos = this.to; this.dir = -1; return 'crossed'; }
-        if (this.pos <= this.from) { this.pos = this.from; this.dir = 1; return 'crossed'; }
+        if (!this.active || this.done) return null;
+        this.pos += this.speed * dt;
+        if (this.pos >= this.to) {
+            this.pos = this.to;
+            this.done = true;
+            this.active = false;
+            return 'crossed';
+        }
         return null;
     }
     get x() { return this.axis === 'x' ? this.pos : this.fixed; }
@@ -811,6 +816,9 @@ class UIController {
         if (d.to === 'S4') {
             this.pedestrians.forEach(p => p.start());
             this.log({ type: 'pedestrian', message: '🚶 PEDESTRIAN WALK ACTIVE — all vehicles stopped' });
+        }
+        if (d.from === 'S4' && d.to !== 'S4') {
+            this.pedestrians.forEach(p => p.stop());
         }
     }
 
