@@ -35,7 +35,7 @@ A fully functional, visually appealing **Traffic Light Controller GUI** based on
 
 Every row is a rule the FSM engine evaluates. The **Input** column is the event that triggers the transition. The **Vehicle** and **Pedestrian** columns show the signal outputs while the *destination* state is active.
 
-| Current State | Input / Condition | Next State | Vehicle Output | Pedestrian Output |
+| Current State | Input / Condition | Next State | Signal Output | Pedestrian Output |
 |---------------|-------------------|------------|----------------|-------------------|
 | S0 (Main Green) | TIMER_EXPIRED (10s) | S1 (Main Yellow) | Main YELLOW / Side RED | ✋ Don't Walk |
 | S1 (Main Yellow) | TIMER_EXPIRED (3s) | S2 (Side Green) | Main RED / Side GREEN | ✋ Don't Walk |
